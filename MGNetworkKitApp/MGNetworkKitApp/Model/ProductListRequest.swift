@@ -7,14 +7,15 @@
 
 import UIKit
 import MGNetworkKit
+import MGNetworkMacros
 import Alamofire
 import Combine
 
 //@API(path: "/product/list", method: .post)
-public struct ProductListRequest: Codable {
-    let page: Int
-    let pageSize: Int
-}
+//public struct ProductListRequest: Codable {
+//    let page: Int
+//    let pageSize: Int
+//}
 
 struct ProductListResponse: Codable {
     let code: Int

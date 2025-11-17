@@ -1,4 +1,4 @@
-// swift-tools-version:5.10
+// swift-tools-version:5.09
 import PackageDescription
 
 let package = Package(
@@ -8,51 +8,36 @@ let package = Package(
     ],
     products: [
         .library(name: "MGNetworkKit", targets: ["MGNetworkKit"]),
-//        .library(name: "MGNetworkMacros", targets: ["MGNetworkMacros"]),
-        // 你可以不把宏实现模块作为 product 对外，如果仅供内部使用
-//        .library(name: "MGNetworkMacrosImplementation", targets: ["MGNetworkMacrosImplementation"]),
+        .library(name: "MGNetworkMacros", targets: ["MGNetworkMacros"]),
         .executable(name: "MGNetworkKitApp", targets: ["MGNetworkKitApp"])
     ],
     dependencies: [
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.6.0"),
-        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0")
+        
+        // 🚨 修复点：为 swift-syntax 显式命名
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "510.0.3"),
     ],
     targets: [
         .target(
             name: "MGNetworkKit",
             dependencies: [
-                Target.Dependency.product(name: "Alamofire", package: "Alamofire"),
-                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
-                .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
-                .product(name: "SwiftSyntax", package: "swift-syntax")
+                .product(name: "Alamofire", package: "Alamofire")
             ],
-            path: "Sources"
+            path: "Sources/MGNetworkKit"
         ),
-//        .target(
-//            name: "MGNetworkMacros",
-//            dependencies: ["MGNetworkMacrosImplementation"],
-//            path: "Sources/MGNetworkMacros"
-//        ),
-//        .target(
-//            name: "MGNetworkMacrosImplementation",
-//            dependencies: [
-//                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-//                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
-//                .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
-//                .product(name: "SwiftSyntax", package: "swift-syntax")
-//            ],
-//            path: "Sources/MGNetworkMacrosImplementation"
-//        ),
+        .target(
+            name: "MGNetworkMacros",
+            dependencies: ["MGNetworkMacrosImplementation"],
+            path: "Sources/MGNetworkMacros"
+        ),
+        .target(
+            name: "MGNetworkMacrosImplementation",
+            path: "Sources/MGNetworkMacrosImplementation"
+        ),
         .executableTarget(
             name: "MGNetworkKitApp",
-            dependencies: ["MGNetworkKit", Target.Dependency.product(name: "Alamofire", package: "Alamofire")],
+            dependencies: ["MGNetworkKit", "MGNetworkMacros", .product(name: "Alamofire", package: "Alamofire")],
             path: "Examples/NetworkKitDemo"
         ),
-//        .testTarget(
-//            name: "MGNetworkKitTests",
-//            dependencies: ["MGNetworkKit"],
-//            path: "Tests/MGNetworkKitTests"
-//        )
     ]
 )
