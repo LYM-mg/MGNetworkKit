@@ -41,6 +41,7 @@ let package = Package(
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax")
             ],
+            path: "Sources/MGNetworkMacrosImplementation"
         ),
         .executableTarget(
             name: "MGNetworkKitApp",

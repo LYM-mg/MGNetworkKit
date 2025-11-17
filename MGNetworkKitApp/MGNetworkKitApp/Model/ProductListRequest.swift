@@ -7,10 +7,11 @@
 
 import UIKit
 import MGNetworkKit
+import MGNetworkMacros
 import Alamofire
 import Combine
 
-//@MGAPI(path: "/product/list", method: .post)
+@MGAPI(path: "/product/list", method: .post)
 public struct ProductListRequest: Codable {
     let page: Int
     let pageSize: Int
@@ -24,7 +25,7 @@ struct ProductListResponse: Codable, Sendable {
 
 public struct Product: Codable, Sendable { let id: Int; let name: String }
 
-//@LYMAPI(path: "/user/info", method: .get)
+@API(path: "/user/info", method: .get)
 public struct UserInfoRequest: Codable {
     var id: Int
 }
