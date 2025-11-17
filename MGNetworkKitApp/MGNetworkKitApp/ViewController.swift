@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  MGNetworkKitApp
 //
-//  Created by 刘远明 on 2025/11/17.
+//  Created by Nicky on 2025/11/17.
 //
 
 import UIKit
@@ -13,7 +13,5 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-
-
 }
 

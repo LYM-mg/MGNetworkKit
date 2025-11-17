@@ -6,8 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		857A15742ECAD44C007FA08C /* MGNetworkKit in Frameworks */ = {isa = PBXBuildFile; productRef = 857A15732ECAD44C007FA08C /* MGNetworkKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-        1B22366F28B46B9F0065F715 /* MGPerfMonitor */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MGNetworkKit; path = ..; sourceTree = "<group>"; };
+		1B22366F28B46B9F0065F715 /* MGNetworkKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MGNetworkKit; path = ..; sourceTree = "<group>"; };
 		857A14A72ECAB909007FA08C /* MGNetworkKitApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MGNetworkKitApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -37,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				857A15742ECAD44C007FA08C /* MGNetworkKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +61,7 @@
 			children = (
 				1B8B1CD828A21511000A7426 /* Packages */,
 				857A14A92ECAB909007FA08C /* MGNetworkKitApp */,
+				857A15782ECB0343007FA08C /* Frameworks */,
 				857A14A82ECAB909007FA08C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -66,6 +72,13 @@
 				857A14A72ECAB909007FA08C /* MGNetworkKitApp.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		857A15782ECB0343007FA08C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -88,6 +101,7 @@
 			);
 			name = MGNetworkKitApp;
 			packageProductDependencies = (
+				857A15732ECAD44C007FA08C /* MGNetworkKit */,
 			);
 			productName = MGNetworkKitApp;
 			productReference = 857A14A72ECAB909007FA08C /* MGNetworkKitApp.app */;
@@ -117,6 +131,9 @@
 			);
 			mainGroup = 857A149E2ECAB909007FA08C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				857A15722ECAD44C007FA08C /* XCRemoteSwiftPackageReference "MGNetworkKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 857A14A82ECAB909007FA08C /* Products */;
 			projectDirPath = "";
@@ -163,6 +180,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -195,6 +213,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -265,7 +284,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -323,7 +342,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -355,6 +374,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		857A15722ECAD44C007FA08C /* XCRemoteSwiftPackageReference "MGNetworkKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LYM-mg/MGNetworkKit.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		857A15732ECAD44C007FA08C /* MGNetworkKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 857A15722ECAD44C007FA08C /* XCRemoteSwiftPackageReference "MGNetworkKit" */;
+			productName = MGNetworkKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 857A149F2ECAB909007FA08C /* Project object */;
 }

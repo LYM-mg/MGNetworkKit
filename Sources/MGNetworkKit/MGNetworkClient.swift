@@ -58,8 +58,8 @@ public final class MGNetworkClient {
 
     @discardableResult
     public func request<T: Codable>(
-        _ method: HTTPMethod = .get,
         _ path: String,
+        _ method: HTTPMethod = .get,
         parameters: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default,
         staticHeaders: [String: String]? = nil,
@@ -89,8 +89,8 @@ public final class MGNetworkClient {
     }
 
     public func publisher<T: Codable>(
-        _ method: HTTPMethod = .get,
         _ path: String,
+        _ method: HTTPMethod = .get,
         parameters: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default,
         staticHeaders: [String: String]? = nil,
@@ -104,7 +104,7 @@ public final class MGNetworkClient {
                 }
                 Task {
                     do {
-                        let v: T = try await self.request(method, path, parameters: parameters, encoding: encoding, staticHeaders: staticHeaders, requestHeaders: requestHeaders)
+                        let v: T = try await self.request(path, method, parameters: parameters, encoding: encoding, staticHeaders: staticHeaders, requestHeaders: requestHeaders)
                         promise(.success(v))
                     } catch let apiError as MGAPIError {
                         promise(.failure(apiError))

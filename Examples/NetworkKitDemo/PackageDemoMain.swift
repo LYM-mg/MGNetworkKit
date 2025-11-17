@@ -4,6 +4,7 @@ import MGNetworkMacros
 import Alamofire
 import Combine
 
+/*
 @MGAPI(path: "/product/search", method: .get, headers: ["X-Feature": "1"])
 struct ProductSearchRequest: Codable {
     let keyword: String
@@ -44,3 +45,4 @@ struct DemoApp {
         print("Demo finished")
     }
 }
+*/

@@ -14,11 +14,9 @@ public struct MGNetworkConfig {
         self.timeout = timeout
     }
 
-    public static var `default`: MGNetworkConfig {
-        MGNetworkConfig(
-            baseURL: URL(string: "https://api.example.com")!,
-            defaultHeaders: HTTPHeaders([HTTPHeader(name: "Accept", value: "application/json")]),
-            timeout: 60
-        )
-    }
+    public static var `default` = MGNetworkConfig(
+        baseURL: URL(string: "https://api.example.com")!,
+        defaultHeaders: HTTPHeaders([HTTPHeader(name: "Accept", value: "application/json")]),
+        timeout: 60
+    )
 }

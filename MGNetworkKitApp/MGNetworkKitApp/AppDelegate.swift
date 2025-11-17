@@ -2,18 +2,15 @@
 //  AppDelegate.swift
 //  MGNetworkKitApp
 //
-//  Created by 刘远明 on 2025/11/17.
+//  Created by Nicky on 2025/11/17.
 //
 
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         return true
     }
 
