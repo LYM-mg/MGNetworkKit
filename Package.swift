@@ -1,5 +1,8 @@
-// swift-tools-version:5.09
+// swift-tools-version: 6.2
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
 import PackageDescription
+import CompilerPluginSupport
 
 let package = Package(
     name: "MGNetworkKit",
@@ -30,9 +33,14 @@ let package = Package(
             dependencies: ["MGNetworkMacrosImplementation"],
             path: "Sources/MGNetworkMacros"
         ),
-        .target(
+        .macro(
             name: "MGNetworkMacrosImplementation",
-            path: "Sources/MGNetworkMacrosImplementation"
+            dependencies: [
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                .product(name: "SwiftSyntax", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax")
+            ],
         ),
         .executableTarget(
             name: "MGNetworkKitApp",

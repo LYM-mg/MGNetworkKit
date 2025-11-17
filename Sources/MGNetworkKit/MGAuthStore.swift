@@ -1,7 +1,9 @@
 import Foundation
 
-public final class MGAuthStore {
+public actor MGAuthStore {
     public static let shared = MGAuthStore()
-    public var accessToken: String?
-    private init() {}
+    private var _accessToken: String?
+    public init() {}
+    public func setAccessToken(_ token: String?) { _accessToken = token }
+    public func accessToken() -> String? { _accessToken }
 }

@@ -2,23 +2,17 @@ import Foundation
 import Alamofire
 import Combine
 
-public final class MGNetworkClient {
-    public static var shared = MGNetworkClient()
+public final class MGNetworkClient: @unchecked Sendable {
+    public static let shared = MGNetworkClient()
 
     private let session: Session
     private let config: MGNetworkConfig
-    private let decoder: JSONDecoder
+
 
     public init(config: MGNetworkConfig = .default,
                 interceptor: RequestInterceptor? = MGMGTokenInterceptor.shared,
                 eventMonitors: [EventMonitor] = [MGNetworkLogger.shared]) {
         self.config = config
-        self.decoder = {
-            let d = JSONDecoder()
-            d.keyDecodingStrategy = .convertFromSnakeCase
-            d.dateDecodingStrategy = .iso8601
-            return d
-        }()
 
         let urlCfg = URLSessionConfiguration.af.default
         urlCfg.timeoutIntervalForRequest = config.timeout
@@ -50,14 +44,14 @@ public final class MGNetworkClient {
     }
 
     // Wrapped response expected: { code: Int, msg: String, data: T }
-    public struct WrappedResponse<T: Codable>: Codable {
+    public struct WrappedResponse<T: Codable & Sendable>: Codable, Sendable {
         public let code: Int
         public let msg: String?
         public let data: T?
     }
 
     @discardableResult
-    public func request<T: Codable>(
+    public func request<T: Codable & Sendable>(
         _ path: String,
         _ method: HTTPMethod = .get,
         parameters: Parameters? = nil,
@@ -69,6 +63,9 @@ public final class MGNetworkClient {
         let headers = mergedHeaders(staticHeaders: staticHeaders, requestHeaders: requestHeaders)
 
         let req = session.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .iso8601
         let response = await req.serializingDecodable(WrappedResponse<T>.self, decoder: decoder).response
 
         if let afErr = response.error {
@@ -88,7 +85,7 @@ public final class MGNetworkClient {
         }
     }
 
-    public func publisher<T: Codable>(
+    public func publisher<T: Codable & Sendable>(
         _ path: String,
         _ method: HTTPMethod = .get,
         parameters: Parameters? = nil,
@@ -102,16 +99,31 @@ public final class MGNetworkClient {
                     promise(.failure(.custom(code: nil, message: "MGNetworkClient deallocated")))
                     return
                 }
-                Task {
-                    do {
-                        let v: T = try await self.request(path, method, parameters: parameters, encoding: encoding, staticHeaders: staticHeaders, requestHeaders: requestHeaders)
-                        promise(.success(v))
-                    } catch let apiError as MGAPIError {
-                        promise(.failure(apiError))
-                    } catch {
-                        if let af = error as? AFError { promise(.failure(.network(af))) }
-                        else if let dec = error as? DecodingError { promise(.failure(.decoding(dec))) }
-                        else { promise(.failure(.custom(code: nil, message: error.localizedDescription))) }
+                let url = self.buildURL(path)
+                let headers = self.mergedHeaders(staticHeaders: staticHeaders, requestHeaders: requestHeaders)
+                let req = self.session.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
+
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                decoder.dateDecodingStrategy = .iso8601
+                req.responseDecodable(of: WrappedResponse<T>.self, decoder: decoder) { response in
+                    if let afErr = response.error {
+                        promise(.failure(.network(afErr)))
+                        return
+                    }
+                    guard let wrapped = response.value else {
+                        let status = response.response?.statusCode ?? -1
+                        promise(.failure(.invalidResponse(statusCode: status, data: response.data)))
+                        return
+                    }
+                    if wrapped.code != 0 {
+                        promise(.failure(.business(code: wrapped.code, message: wrapped.msg)))
+                        return
+                    }
+                    if let d = wrapped.data {
+                        promise(.success(d))
+                    } else {
+                        promise(.failure(.custom(code: wrapped.code, message: wrapped.msg)))
                     }
                 }
             }

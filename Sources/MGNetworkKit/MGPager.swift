@@ -42,23 +42,17 @@ public final class MGPager<Item: Codable> {
         state = .initial
     }
 
-    public func refresh() {
-        Task {
-            await performLoad(isRefresh: true)
-        }
+    public func refresh() async {
+        await performLoad(isRefresh: true)
     }
 
-    public func loadNext() {
+    public func loadNext() async {
         guard !noMoreData else { return }
-        Task {
-            await performLoad(isRefresh: false)
-        }
+        await performLoad(isRefresh: false)
     }
 
     private func setState(_ s: MGPagerState<Item>) {
-        DispatchQueue.main.async {
-            self.state = s
-        }
+        self.state = s
     }
 
     private func performLoad(isRefresh: Bool) async {

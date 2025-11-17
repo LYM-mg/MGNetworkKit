@@ -28,15 +28,15 @@ public struct MGAPIMacro: ExtensionMacro {
 """
 extension \(raw: typeName) {
 @discardableResult
-public static func request<R: Codable>(
+public static func request<R: Codable & Sendable>(
     _ model: \(raw: typeName),
     headers: HTTPHeaders? = nil
 ) async throws -> R {
     let jsonData = try JSONEncoder().encode(model)
     let params = (try JSONSerialization.jsonObject(with: jsonData) as? [String: Any]) ?? [:]
     return try await MGNetworkClient.shared.request(
-        \(raw: method),
         \(raw: path),
+        \(raw: method),
         parameters: params,
         encoding: \(raw: method) == .get ? URLEncoding.default : JSONEncoding.default,
         staticHeaders: \(raw: headersExpr),
@@ -44,15 +44,15 @@ public static func request<R: Codable>(
     )
 }
 
-public static func publisher<R: Codable>(
+public static func publisher<R: Codable & Sendable>(
     _ model: \(raw: typeName),
     headers: HTTPHeaders? = nil
 ) -> AnyPublisher<R, MGAPIError> {
     let jsonData = try? JSONEncoder().encode(model)
     let params = (jsonData.flatMap { try? JSONSerialization.jsonObject(with: $0) as? [String: Any] }) ?? [:]
     return MGNetworkClient.shared.publisher(
-        \(raw: method),
         \(raw: path),
+        \(raw: method),
         parameters: params,
         encoding: \(raw: method) == .get ? URLEncoding.default : JSONEncoding.default,
         staticHeaders: \(raw: headersExpr),
@@ -123,4 +123,11 @@ public static func publisher<R: Codable>(
 //"""
 //            ].map { try! ExtensionDeclSyntax($0) }
 //        }
+}
+
+// 注册插件
+struct NetworkMacroPlugin: CompilerPlugin {
+    public let providingMacros: [Macro.Type] = [
+        MGAPIMacro.self
+    ]
 }

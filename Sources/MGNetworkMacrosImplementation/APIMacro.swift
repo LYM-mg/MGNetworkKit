@@ -68,7 +68,7 @@ public struct APIMacro: ExtensionMacro {
 
 // 注册插件
 @main
-struct NetworkMacroPlugin: CompilerPlugin {
+struct APIMacroPlugin: CompilerPlugin {
     public let providingMacros: [Macro.Type] = [
         APIMacro.self,
     ]

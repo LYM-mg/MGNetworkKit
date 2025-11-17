@@ -1,6 +1,10 @@
 import Foundation
-import SwiftSyntaxMacros
 import Alamofire
+
+import SwiftSyntaxMacros
+import SwiftSyntax
+import SwiftSyntaxBuilder
+import SwiftCompilerPlugin
 
 @attached(extension, names: named(request), named(publisher))
 public macro MGAPI(

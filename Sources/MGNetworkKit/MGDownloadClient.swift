@@ -2,7 +2,7 @@ import Foundation
 import Alamofire
 import Combine
 
-public final class MGDownloadClient {
+public final class MGDownloadClient: Sendable {
     public static let shared = MGDownloadClient()
 
     public init() {}

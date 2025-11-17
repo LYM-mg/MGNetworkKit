@@ -7,7 +7,6 @@
 
 import UIKit
 import MGNetworkKit
-import MGNetworkMacros
 import Combine
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

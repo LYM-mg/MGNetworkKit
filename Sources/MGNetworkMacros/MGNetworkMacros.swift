@@ -50,7 +50,7 @@ public struct MGAPIMemberMacro: MemberMacro {
         // 2. 构造 request 方法
         let requestMethod = """
         @discardableResult
-        public func request<T: Codable>(
+        public func request<T: Codable & Sendable>(
             parameters: Parameters? = nil,
             encoding: ParameterEncoding = URLEncoding.default,
             requestHeaders: HTTPHeaders? = nil
@@ -69,7 +69,7 @@ public struct MGAPIMemberMacro: MemberMacro {
 
         // 3. 构造 publisher 方法
         let publisherMethod = """
-        public func publisher<T: Codable>(
+        public func publisher<T: Codable & Sendable>(
             parameters: Parameters? = nil,
             encoding: ParameterEncoding = URLEncoding.default,
             requestHeaders: HTTPHeaders? = nil

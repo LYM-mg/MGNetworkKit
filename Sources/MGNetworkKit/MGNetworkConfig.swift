@@ -1,7 +1,7 @@
 import Foundation
 import Alamofire
 
-public struct MGNetworkConfig {
+public struct MGNetworkConfig: Sendable {
     public var baseURL: URL
     public var defaultHeaders: HTTPHeaders
     public var timeout: TimeInterval
@@ -14,7 +14,7 @@ public struct MGNetworkConfig {
         self.timeout = timeout
     }
 
-    public static var `default` = MGNetworkConfig(
+    public static let `default` = MGNetworkConfig(
         baseURL: URL(string: "https://api.example.com")!,
         defaultHeaders: HTTPHeaders([HTTPHeader(name: "Accept", value: "application/json")]),
         timeout: 60

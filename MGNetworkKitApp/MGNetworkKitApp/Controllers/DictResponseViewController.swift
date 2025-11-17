@@ -12,16 +12,16 @@ class DictResponseViewController: UITableViewController {
     }
 
     @objc private func load() {
-        Task {
-            do {
-                let req = UserInfoRequest(id: 1)
-                let u: User = try await UserInfoRequest.request(req)
-                self.user = u
-                DispatchQueue.main.async { self.tableView.reloadData() }
-            } catch {
-                print("Error:", error)
-            }
-        }
+//        Task {
+//            do {
+//                let req = UserInfoRequest(id: 1)
+//                let u: User = try await UserInfoRequest.request(req)
+//                self.user = u
+//                DispatchQueue.main.async { self.tableView.reloadData() }
+//            } catch {
+//                print("Error:", error)
+//            }
+//        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { user == nil ? 0 : 1 }

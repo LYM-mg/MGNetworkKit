@@ -12,17 +12,17 @@ class WrappedResponseViewController: UITableViewController {
     }
 
     @objc private func load() {
-        Task {
-            do {
-                // Example: API returns {code:0, msg:"", data: [ ... ] }
-                let req = ProductListRequest(page: 1, pageSize: 20)
-                let arr: [Product] = try await ProductListRequest.request(req)
-                self.items = arr
-                DispatchQueue.main.async { self.tableView.reloadData() }
-            } catch {
-                print("Error:", error)
-            }
-        }
+//        Task {
+//            do {
+//                // Example: API returns {code:0, msg:"", data: [ ... ] }
+//                let req = ProductListRequest(page: 1, pageSize: 20)
+//                let arr: [Product] = try await ProductListRequest.request(req)
+//                self.items = arr
+//                DispatchQueue.main.async { self.tableView.reloadData() }
+//            } catch {
+//                print("Error:", error)
+//            }
+//        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { items.count }
