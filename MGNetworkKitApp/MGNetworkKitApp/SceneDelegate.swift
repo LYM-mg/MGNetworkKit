@@ -26,6 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             $0.baseURL = URL(string: "http://tingapi.ting.baidu.com/v1")!
             $0.defaultHeaders["platform"] = "iOS"
             $0.defaultHeaders["version"] = "1.0"
+            $0.defaultHeaders["Content-Type"] = "application/json"
             $0.timeout = 40
             $0.logEnabled = true
         }

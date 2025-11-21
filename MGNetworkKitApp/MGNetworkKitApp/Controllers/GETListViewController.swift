@@ -16,12 +16,18 @@ class GETListViewController: UITableViewController {
     func loadData() async {
         // Call generated API extension (hand-written in GeneratedAPIs/UserInfoRequest+API.swift)
         do {
-            let req = UserInfoRequest(id: 1)
-            let user: User = try await UserInfoRequest.request(req)
-            print("User:", user)
+//            let req = UserInfoRequest(id: 1)
+//            let user: User = try await UserInfoRequest.request(req)
+//            let parameters: [String: Any] = ["method":"baidu.ting.billboard.billCategory","kflag":"1","from":"ios","version":"5.5.6","channel":"appstore","operator":"1","format":"json"]
+            let request = MGSongRequest(channel: "appstore", format: "json", from: "ios", kflag: "1", method: "baidu.ting.billboard.billCategory", aoperator: "1", version: "5.5.6")
+            let song: MGSong = try await MGSongRequest.request(request)
+            print("song:", song)
         } catch {
             print("\(error)")
         }
+//        MGSessionManager.default.request("http://tingapi.ting.baidu.com/v1/restserver/ting", method: .post, parameters: parameters).mgResponseDecodableObject() { (response: DataResponse<MGSong>) in
+//            print(response)
+//        }
     }
 
     override func viewDidLoad() {

@@ -80,6 +80,33 @@ public final class MGNetworkClient: @unchecked Sendable {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         decoder.dateDecodingStrategy = .iso8601
+        let response = await req.serializingDecodable(T.self, decoder: decoder).response
+
+        print("MGGG: response = \(response)")
+        if let afErr = response.error { throw MGAPIError.network(afErr) }
+        guard let value = response.value else {
+            let status = response.response?.statusCode ?? -1
+            throw MGAPIError.invalidResponse(statusCode: status, data: response.data)
+        }
+        return value
+    }
+    
+    @discardableResult
+    public func requestForWrapped<T: Codable & Sendable>(
+        _ path: String,
+        _ method: HTTPMethod = .get,
+        parameters: Parameters? = nil,
+        encoding: ParameterEncoding = URLEncoding.default,
+        staticHeaders: [String: String]? = nil,
+        requestHeaders: HTTPHeaders? = nil
+    ) async throws -> T {
+        let url = buildURL(path)
+        let headers = mergedHeaders(staticHeaders: staticHeaders, requestHeaders: requestHeaders)
+
+        let req = session.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .iso8601
         let response = await req.serializingDecodable(WrappedResponse<T>.self, decoder: decoder).response
 
         if let afErr = response.error { throw MGAPIError.network(afErr) }

@@ -48,24 +48,6 @@ public struct MGAPIMacro: ExtensionMacro {
                         requestHeaders: headers
                     )
                 }
-
-                public static func publisher<R: Codable>(
-                    _ model: \(raw: typeName),
-                    method: HTTPMethod? = HTTPMethod.get,
-                    headers: HTTPHeaders? = nil
-                ) -> AnyPublisher<R, MGAPIError> {
-                    let data = try? JSONEncoder().encode(model)
-                    let params = (data.flatMap { try? JSONSerialization.jsonObject(with: $0) as? [String: Any] }) ?? [:]
-                    let encoding: ParameterEncoding = method == HTTPMethod.get ? URLEncoding.default : JSONEncoding.default
-                    return MGNetworkClient.shared.publisher(
-                        \(raw: path),
-                        \(raw: method),
-                        parameters: params,
-                        encoding: encoding,
-                        staticHeaders: \(raw: headers),
-                        requestHeaders: headers
-                    )
-                }
             }
             """
         )
