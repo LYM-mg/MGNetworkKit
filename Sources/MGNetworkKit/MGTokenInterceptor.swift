@@ -1,8 +1,8 @@
 import Foundation
 import Alamofire
 
-public final class MGMGTokenInterceptor: RequestInterceptor, @unchecked Sendable {
-    public static let shared = MGMGTokenInterceptor()
+public final class MGTokenInterceptor: RequestInterceptor, @unchecked Sendable {
+    public static let shared = MGTokenInterceptor()
 
     private let lock = NSLock()
     private var isRefreshing = false

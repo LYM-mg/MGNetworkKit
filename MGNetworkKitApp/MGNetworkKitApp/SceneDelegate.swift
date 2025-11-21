@@ -8,6 +8,7 @@
 import UIKit
 import MGNetworkKit
 import Combine
+import Alamofire
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -20,7 +21,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = scene as? UIWindowScene else { return }
             window = UIWindow(windowScene: windowScene)
-        //        MGNetworkConfig.default.baseURL = URL(string: "https://api.example.com")!
+
+        MGNetworkClient.shared.configure {
+            $0.baseURL = URL(string: "http://tingapi.ting.baidu.com/v1")!
+            $0.defaultHeaders["platform"] = "iOS"
+            $0.defaultHeaders["version"] = "1.0"
+            $0.timeout = 40
+            $0.logEnabled = true
+        }
         
         let main = MainTabBarController()
         window?.rootViewController = main
@@ -58,3 +66,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
+
+public enum MGAPIEnvironment {
+    case production
+    case staging
+    case sandbox
+
+    var config: MGNetworkConfig {
+        switch self {
+        case .production:
+            MGNetworkConfig(baseURL: URL(string: "http://tingapi.ting.baidu.com/v1")!)
+        case .staging:
+            MGNetworkConfig(baseURL: URL(string: "http://tingapi.ting.baidu.com/v1")!)
+        case .sandbox:
+            MGNetworkConfig(baseURL: URL(string: "http://tingapi.ting.baidu.com/v1")!)
+        }
+    }
+}
+
+extension MGNetworkClient {
+    public static func configure(_ environment: MGAPIEnvironment) {
+        MGNetworkClient.shared.configure { $0 = environment.config }
+    }
+}

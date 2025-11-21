@@ -3,42 +3,56 @@ import Alamofire
 import Combine
 
 public final class MGNetworkClient: @unchecked Sendable {
+    
+    // MARK: - Shared instance
     public static let shared = MGNetworkClient()
-
-    private let session: Session
-    private let config: MGNetworkConfig
-
-
-    public init(config: MGNetworkConfig = .default,
-                interceptor: RequestInterceptor? = MGMGTokenInterceptor.shared,
+    
+    // MARK: - Properties
+    public private(set) var config: MGNetworkConfig
+    private var session: Session
+    private let decoder: JSONDecoder
+    
+    // MARK: - Init
+    public init(config: MGNetworkConfig = .init(baseURL: URL(string: "https://api.example.com")!),
+                interceptor: RequestInterceptor? = MGTokenInterceptor.shared,
                 eventMonitors: [EventMonitor] = [MGNetworkLogger.shared]) {
+        
         self.config = config
-
+        self.decoder = JSONDecoder()
+        self.decoder.keyDecodingStrategy = .convertFromSnakeCase
+        self.decoder.dateDecodingStrategy = .iso8601
+        
         let urlCfg = URLSessionConfiguration.af.default
         urlCfg.timeoutIntervalForRequest = config.timeout
         urlCfg.headers = .default
-
+        
         self.session = Session(configuration: urlCfg, interceptor: interceptor, eventMonitors: eventMonitors)
     }
-
+    
+    // MARK: - Configure
+    public func configure(_ block: (inout MGNetworkConfig) -> Void) {
+        block(&config)
+        let urlCfg = URLSessionConfiguration.af.default
+        urlCfg.timeoutIntervalForRequest = config.timeout
+        urlCfg.headers = .default
+        self.session = Session(configuration: urlCfg, interceptor: MGTokenInterceptor.shared, eventMonitors: [MGNetworkLogger.shared])
+    }
+    
+    // MARK: - Helpers
     private func buildURL(_ path: String) -> URL {
         if path.contains("://"), let u = URL(string: path) { return u }
         return config.baseURL.appendingPathComponent(path)
     }
-
-    public func mergedHeaders(staticHeaders: [String: String]? = nil,
-                              requestHeaders: HTTPHeaders? = nil) -> HTTPHeaders {
+    
+    private func mergedHeaders(staticHeaders: [String: String]? = nil,
+                               requestHeaders: HTTPHeaders? = nil) -> HTTPHeaders {
         var result = HTTPHeaders()
         config.defaultHeaders.forEach { result.add($0) }
         if let sh = staticHeaders {
-            for (k, v) in sh {
-                result.update(name: k, value: v)
-            }
+            for (k, v) in sh { result.update(name: k, value: v) }
         }
         if let rh = requestHeaders {
-            for h in rh {
-                result.update(name: h.name, value: h.value)
-            }
+            for h in rh { result.update(name: h.name, value: h.value) }
         }
         return result
     }
@@ -68,21 +82,14 @@ public final class MGNetworkClient: @unchecked Sendable {
         decoder.dateDecodingStrategy = .iso8601
         let response = await req.serializingDecodable(WrappedResponse<T>.self, decoder: decoder).response
 
-        if let afErr = response.error {
-            throw MGAPIError.network(afErr)
-        }
+        if let afErr = response.error { throw MGAPIError.network(afErr) }
         guard let wrapped = response.value else {
             let status = response.response?.statusCode ?? -1
             throw MGAPIError.invalidResponse(statusCode: status, data: response.data)
         }
-        if wrapped.code != 0 {
-            throw MGAPIError.business(code: wrapped.code, message: wrapped.msg)
-        }
-        if let d = wrapped.data {
-            return d
-        } else {
-            throw MGAPIError.custom(code: wrapped.code, message: wrapped.msg)
-        }
+        if wrapped.code != 0 { throw MGAPIError.business(code: wrapped.code, message: wrapped.msg) }
+        if let d = wrapped.data { return d }
+        throw MGAPIError.custom(code: wrapped.code, message: wrapped.msg)
     }
 
     public func publisher<T: Codable & Sendable>(
