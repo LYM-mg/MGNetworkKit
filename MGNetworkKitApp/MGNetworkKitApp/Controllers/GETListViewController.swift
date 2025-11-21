@@ -6,12 +6,37 @@ class GETListViewController: UITableViewController {
     private var items: [Product] = []
     private var pager: MGPager<Product>!
     private var bag = Set<AnyCancellable>()
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        Task {
+            await loadData()
+        }
+    }
+    
+    func loadData() async {
+        // Call generated API extension (hand-written in GeneratedAPIs/UserInfoRequest+API.swift)
+        do {
+            let req = UserInfoRequest(id: 1)
+            let user: User = try await UserInfoRequest.request(req)
+            print("User:", user)
+        } catch {
+            print("\(error)")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "GET List"
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-
+        Task {
+            await loadData()
+        }
+        
+//        UserInfoRequest
+//        let req = ProductListRequest(page: 1, pageSize: 10)
+//        try await ProductListRequest.request<MGPageResult>(req)
+        
+//        UserInfoRequest.req
 //        pager = MGPager<Product>(pageSize: 20) { page, pageSize in
 //            let req = ProductListRequest(page: page, pageSize: pageSize)
 //            // This uses GeneratedAPIs/ProductListRequest+API.swift

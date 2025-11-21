@@ -24,9 +24,12 @@ let package = Package(
         .target(
             name: "MGNetworkKit",
             dependencies: [
-                .product(name: "Alamofire", package: "Alamofire")
+                .product(name: "Alamofire", package: "Alamofire"),
+                "MGNetworkMacros"
             ],
-            path: "Sources/MGNetworkKit"
+            path: "Sources/MGNetworkKit", plugins: [
+                .plugin(name: "MGNetworkMacrosImplementation")
+            ]
         ),
         .target(
             name: "MGNetworkMacros",
@@ -39,7 +42,8 @@ let package = Package(
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
-                .product(name: "SwiftSyntaxMacros", package: "swift-syntax")
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                .product(name: "Alamofire", package: "Alamofire"),
             ],
             path: "Sources/MGNetworkMacrosImplementation"
         ),

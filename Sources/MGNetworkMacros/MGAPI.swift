@@ -11,6 +11,6 @@ public macro MGAPI(
 @attached(extension, names: named(request), named(publisher))
 public macro API(
     path: String,
-    method: HTTPMethod = .get,
+    method: HTTPMethod,
     headers: [String: String] = [:]
 ) = #externalMacro(module: "MGNetworkMacrosImplementation", type: "APIMacro")

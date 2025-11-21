@@ -25,12 +25,12 @@ struct ProductListResponse: Codable, Sendable {
 
 public struct Product: Codable, Sendable { let id: Int; let name: String }
 
-@API(path: "/user/info", method: .get)
+@MGAPI(path: "/user/info", method: .get)
 public struct UserInfoRequest: Codable {
     var id: Int
 }
 
-//@LYMAPI(path: "/product/search", method: .get)
+@API(path: "/product/search", method: .post)
 public struct User: Codable, Sendable {
     let id: Int
     let name: String
